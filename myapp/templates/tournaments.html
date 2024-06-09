@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Tournaments List{% endblock %}
+
+{% block content %}
+<h1 class="header center orange-text">Tournaments List</h1>
+<div class="row">
+    <form method="get" class="col s12" id="filterForm">
+        <div class="row">
+            <div class="input-field col s3">
+                <input type="text" name="q" id="search" value="{{ query|default_if_none:'' }}">
+                <label for="search">Search by Name</label>
+            </div>
+            <div class="input-field col s2">
+                <select name="year" id="year">
+                    <option value="" disabled selected>Choose year</option>
+                    {% for year in years %}
+                        <option value="{{ year }}" {% if year == year_filter %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+                <label for="year">Filter by Year</label>
+            </div>
+            <div class="input-field col s2">
+                <select name="country" id="country">
+                    <option value="" disabled selected>Choose country</option>
+                    {% for country in countries %}
+                        <option value="{{ country }}" {% if country == country_filter %}selected{% endif %}>{{ country }}</option>
+                    {% endfor %}
+                </select>
+                <label for="country">Filter by Country</label>
+            </div>
+            <div class="input-field col s2">
+                <select name="city" id="city">
+                    <option value="" disabled selected>Choose city</option>
+                    {% for city in cities %}
+                        <option value="{{ city }}" {% if city == city_filter %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
+                <label for="city">Filter by City</label>
+            </div>
+            <div class="input-field col s2">
+                <select name="category" id="category">
+                    <option value="" disabled selected>Choose category</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if category == category_filter %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <label for="category">Filter by Category</label>
+            </div>
+            <div class="input-field col s1">
+                <button type="submit" class="btn waves-effect waves-light">Search</button>
+            </div>
+        </div>
+        <button type="button" class="btn waves-effect waves-light red" onclick="clearFilters()">Clear Filters</button>
+    </form>
+</div>
+
+<div class="row">
+    <table class="striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tournament in tournaments %}
+                <tr>
+                    <td><a href="{% url 'tournament_detail' tournament.id %}">{{ tournament.full_name }}</a></td>
+                    <td>{{ tournament.country }}</td>
+                    <td>{{ tournament.city }}</td>
+                    <td><a href="{{ tournament.url }}" target="_blank">See at cuetracker</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col s12 center">
+        <ul class="pagination">
+            {% if tournaments.has_previous %}
+                <li class="waves-effect">
+                    <a href="?{% if query %}q={{ query }}&{% endif %}{% if year_filter %}year={{ year_filter }}&{% endif %}{% if country_filter %}country={{ country_filter }}&{% endif %}{% if city_filter %}city={{ city_filter }}&{% endif %}{% if category_filter %}category={{ category_filter }}&{% endif %}page=1">
+                        <i class="material-icons">first_page</i>
+                    </a>
+                </li>
+                <li class="waves-effect">
+                    <a href="?{% if query %}q={{ query }}&{% endif %}{% if year_filter %}year={{ year_filter }}&{% endif %}{% if country_filter %}country={{ country_filter }}&{% endif %}{% if city_filter %}city={{ city_filter }}&{% endif %}{% if category_filter %}category={{ category_filter }}&{% endif %}page={{ tournaments.previous_page_number }}">
+                        <i class="material-icons">chevron_left</i>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="#">
+                        <i class="material-icons">first_page</i>
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a href="#">
+                        <i class="material-icons">chevron_left</i>
+                    </a>
+                </li>
+            {% endif %}
+                
+            {% for page_num in tournaments.paginator.page_range %}
+                {% if tournaments.number == page_num %}
+                    <li class="active"><a href="#">{{ page_num }}</a></li>
+                {% elif page_num > tournaments.number|add:'-2' and page_num < tournaments.number|add:'2' %}
+                    <li class="waves-effect"><a href="?{% if query %}q={{ query }}&{% endif %}{% if year_filter %}year={{ year_filter }}&{% endif %}{% if country_filter %}country={{ country_filter }}&{% endif %}{% if city_filter %}city={{ city_filter }}&{% endif %}{% if category_filter %}category={{ category_filter }}&{% endif %}page={{ page_num }}">{{ page_num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if tournaments.has_next %}
+                <li class="waves-effect">
+                    <a href="?{% if query %}q={{ query }}&{% endif %}{% if year_filter %}year={{ year_filter }}&{% endif %}{% if country_filter %}country={{ country_filter }}&{% endif %}{% if city_filter %}city={{ city_filter }}&{% endif %}{% if category_filter %}category={{ category_filter }}&{% endif %}page={{ tournaments.next_page_number }}">
+                        <i class="material-icons">chevron_right</i>
+                    </a>
+                </li>
+                <li class="waves-effect">
+                    <a href="?{% if query %}q={{ query }}&{% endif %}{% if year_filter %}year={{ year_filter }}&{% endif %}{% if country_filter %}country={{ country_filter }}&{% endif %}{% if city_filter %}city={{ city_filter }}&{% endif %}{% if category_filter %}category={{ category_filter }}&{% endif %}page={{ tournaments.paginator.num_pages }}">
+                        <i class="material-icons">last_page</i>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="#">
+                        <i class="material-icons">chevron_right</i>
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a href="#">
+                        <i class="material-icons">last_page</i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        <span>Total pages amount: {{ tournaments.paginator.num_pages }}</span>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+        elems.forEach(function(select) {
+            select.addEventListener('change', function() {
+                document.querySelector('form').submit();
+            });
+        });
+    });
+    
+    function clearFilters() {
+        document.getElementById("search").value = "";
+        document.getElementById("year").value = "";
+        document.getElementById("country").value = "";
+        document.getElementById("city").value = "";
+        document.getElementById("filterForm").submit();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tournament.full_name }}{% endblock %}
+
+{% block content %}
+<h1 class="header center orange-text">{{ tournament.full_name }}</h1>
+<div class="row">
+    <div class="col s12">
+        <p><strong>Year: </strong>{% if tournament.year %}{{ tournament.year }}{% else %}Not available{% endif %}</p>
+        <p><strong>Season: </strong>{% if tournament.season %}{{ tournament.season }}{% else %}Not available{% endif %}</p>
+        <p><strong>Country: </strong>{% if tournament.country %}{{ tournament.country }}{% else %}Not available{% endif %}</p>
+        <p><strong>City: </strong>{% if tournament.city %}{{ tournament.city }}{% else %}Not available{% endif %}</p>
+        <p><strong>Category: </strong>{% if tournament.category %}{{ tournament.category }}{% else %}Not available{% endif %}</p>
+        <p><strong>Link: </strong>
+            <a href="{{ tournament.url }}" target="_blank">See at cuetracker</a>
+        </p>
+    </div>
+    <div class="col s12">
+        <h5>{{ tournament.full_name }} last matches</h5>
+        <ul class="collection">
+            {% for match in matches %}                   
+            <li class="collection-item">
+                {% include 'match_detail.html' with match=match %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+<nav>
+    <div class="nav-wrapper">
+        <a href="{% url 'dashboard' %}" class="brand-logo">SnookerStats</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li class="{% if request.path == '/' %}active{% endif %}">
+                <a href="{% url 'dashboard' %}">Home</a>
+            </li>
+            <li class="{% if request.path == '/players/' %}active{% endif %}">
+                <a href="{% url 'players' %}">Players</a>
+            </li>
+            <li class="{% if request.path == '/tournaments/' %}active{% endif %}">
+                <a href="{% url 'tournaments' %}">Tournaments</a>
+            </li>
+            <li class="{% if request.path == '/matches/' %}active{% endif %}">
+                <a href="{% url 'matches' %}">Last Matches</a>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+    <!-- Include Materialize CSS here -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Signup</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-field">
+            {{ form.username }}
+            <label for="id_username">Username</label>
+            <span class="helper-text red-text" data-error="{{ form.username.errors }}">{{ form.username.errors }}</span>
+        </div>
+        <div class="input-field">
+            {{ form.email }}
+            <label for="id_email">Email</label>
+            <span class="helper-text red-text" data-error="{{ form.email.errors }}">{{ form.email.errors }}</span>
+        </div>
+        <div class="input-field">
+            {{ form.password1 }}
+            <label for="id_password1">Password</label>
+            <span class="helper-text red-text" data-error="{{ form.password1.errors }}">{{ form.password1.errors }}</span>
+        </div>
+        <div class="input-field">
+            {{ form.password2 }}
+            <label for="id_password2">Confirm Password</label>
+            <span class="helper-text red-text" data-error="{{ form.password2.errors }}">{{ form.password2.errors }}</span>
+        </div>
+        <button type="submit" class="btn">Signup</button>
+    </form>
+
+    <p>Allready have an account? <a href="{% url 'signin' %}">Sign in here</a></p>
+</div>
+
+<!-- Include Materialize JS here -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+</html>

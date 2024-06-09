@@ -1,0 +1,12 @@
+.brand-logo {
+    padding-left: 15px !important;
+}
+
+.container {
+    width: 90% !important;
+    max-width: unset;
+}
+
+.col .row {
+    margin: 0;
+}

@@ -1,0 +1,31 @@
+{% block content %}
+<div class="row collection-item">
+    <table class="striped">
+        <tr>
+            <th>Tournament</th>
+            <th>Date</th>
+            <th>Stage</th>
+            <th>Best of</th>
+            <th>Players</th>
+            <th>Result</th>
+            
+        </tr>
+        <tr>
+            <td>{{ match.tournament_id.full_name }}</td>
+            <td>{{ match.date }}</td>
+            <td>{{ match.stage }}</td>
+            <td>{{ match.best_of }}</td>
+            <td>{{ match.player1_name }} - {{ match.player2_name }}</td>
+            <td>
+                {{ match.score1 }} - {{ match.score2 }}
+            </td>
+            
+        </tr>
+        {% if match.frames_scores %}
+            <tr>
+                <td colspan="6"><b>Frames score: </b>{{ match.frames_scores }}</td>
+            </tr>
+        {% endif %}
+    </table>
+</div>
+{% endblock %}
